@@ -156,7 +156,7 @@ SELECT * FROM MEMBER2;
   * 
   * 입력 데이터에 문제가 없는지 자동으로 검사하는 목적
   * 데이터의 수정/삭제 가능 여부 검사하는 목적으로 함.
-  * -> 제약조건을 이배하는 DML구문은 수행할 수 없다.
+  * -> 제약조건을 위배하는 DML구문은 수행할 수 없다.
   * 
   * 제약조건 종류
   * PRIMARY KEY, NOT NULL, UNIQUE, CHECK, FOREIGN KEY
@@ -185,7 +185,7 @@ INSERT INTO USER_USED_NN VALUES
 
 INSERT INTO USER_USED_NN VALUES
 (NULL,'USER01','PASS01','홍길동','남자','010-1234-5678','hong@kr.or.kr');
--- ORA-01400: cannot insert NULL into ("KH_YHJ"."USER_USED_NN"."USER_NO")
+-- NULL을 ("KH_YHJ"."USER_USED_NN"."USER_NO") 안에 삽입할 수 없습니다
 --> NOT NULL 제약조건 위배되어 오류발생!
 
 SELECT * FROM USER_USED_NN;
@@ -224,7 +224,7 @@ INSERT INTO USER_USED_UK VALUES
 
 INSERT INTO USER_USED_UK VALUES
 (1,'USER01','PASS01','홍길동','남자','010-1234-5678','hong@kr.or.kr');
--- ORA-00001: unique constraint (KH_YHJ.USER_ID_U) violated
+-- ORA-00001: 무결성 제약 조건(KH_YHJ.USER_ID_U)에 위배됩니다
 
 INSERT INTO USER_USED_UK VALUES
 (1,NULL,'PASS01','홍길동','남자','010-1234-5678','hong@kr.or.kr');
@@ -265,7 +265,7 @@ INSERT INTO USER_USED_UK2 VALUES
 
 INSERT INTO USER_USED_UK2 VALUES
 (1,'USER02','PASS01','고길동','남자','010-1234-5678','hong@kr.or.kr');
--- ORA-00001: unique constraint (KH_YHJ.USER_ID_NAME_U) violated
+-- ORA-00001: 무결성 제약 조건(KH_YHJ.USER_ID_NAME_U)에 위배됩니다
 --> 복합키로 지정된 컬럼값 중 하나라도 다르면 위배되지 않음
 --> 모든 컬럼의 값이 중복되면 위배된다
 
@@ -296,12 +296,12 @@ INSERT INTO USER_USED_PK VALUES
 
 INSERT INTO USER_USED_PK VALUES
 (1,'USER02','PASS02','이순신','남자','010-2222-5678','lee@kr.or.kr');
--- ORA-00001: unique constraint (KH_YHJ.USER_NO_PK) violated
+-- ORA-00001: 무결성 제약 조건(KH_YHJ.USER_NO_PK)에 위배됩니다
 --> 기본키 중복 오류!
 
 INSERT INTO USER_USED_PK VALUES
 (NULL,'USER02','PASS02','이순신','남자','010-2222-5678','lee@kr.or.kr');
--- ORA-01400: cannot insert NULL into ("KH_YHJ"."USER_USED_PK"."USER_NO")
+-- ORA-01400: NULL을 ("KH_YHJ"."USER_USED_PK"."USER_NO") 안에 삽입할 수 없습니다
 --> 기본키 NULL 이므로 오류!
 
 INSERT INTO USER_USED_PK VALUES
@@ -333,16 +333,16 @@ INSERT INTO USER_USED_PK2 VALUES
 
 INSERT INTO USER_USED_PK2 VALUES
 (2,'USER02','PASS01','홍길동','남자','010-1234-5678','hong@kr.or.kr');
--- ORA-00001: unique constraint (KH_YHJ.PK_USERNO_USERID) violated
+-- ORA-00001: 무결성 제약 조건(KH_YHJ.PK_USERNO_USERID)에 위배됩니다
 --> USER_NO, USER_ID 둘 다 중복되었을 때만 제약조건 위배!
 
 INSERT INTO USER_USED_PK2 VALUES
 (NULL,'USER02','PASS01','홍길동','남자','010-1234-5678','hong@kr.or.kr');
--- ORA-01400: cannot insert NULL into ("KH_YHJ"."USER_USED_PK2"."USER_NO")
+-- ORA-01400: NULL을 ("KH_YHJ"."USER_USED_PK2"."USER_NO") 안에 삽입할 수 없습니다
 
 INSERT INTO USER_USED_PK2 VALUES
 (3,NULL,'PASS01','홍길동','남자','010-1234-5678','hong@kr.or.kr');
--- ORA-01400: cannot insert NULL into ("KH_YHJ"."USER_USED_PK2"."USER_ID")
+-- ORA-01400: NULL을 ("KH_YHJ"."USER_USED_PK2"."USER_ID") 안에 삽입할 수 없습니다
 --> 둘 중 하나라도 NULL 이면 위배!!!
 
 -----------------------------------------------------------
@@ -415,12 +415,12 @@ INSERT INTO USER_USED_FK VALUES
 INSERT INTO USER_USED_FK VALUES
 (5,'USER05','PASS05','윤봉길',
 '남자','010-3333-5234','yoon@kr.or.kr', 50);
--- integrity constraint (KH_YHJ.GRADE_CODE_FK) violated - parent key not found
+-- ORA-02291: 무결성 제약조건(KH_YHJ.GRADE_CODE_FK)이 위배되었습니다- 부모 키가 없습니다
 --> 외래키 제약조건에 위배되어 오류 발생(부모의 GRADE_CODE 에는 50값 없음)
 
 ----------------------------------------------------
 -- * FOREIGN KEY 삭제 옵션
--- 부모 테이블의 데니터 삭제 시 자식 테이블의 데이터를
+-- 부모 테이블의 데이터 삭제 시 자식 테이블의 데이터를
 -- 어떤 식으로 처리할지에 대한 내용을 설정할 수 있다.
 
 -- 1) ON DELETE RESTRICTED(삭제 제한)로 기본 지정되어 있음
@@ -428,7 +428,7 @@ INSERT INTO USER_USED_FK VALUES
 -- 제공하는 컬럼의 값은 삭제하지 못함
 
 DELETE FROM USER_GRADE WHERE GRADE_CODE = 30;
--- ORA-02292: integrity constraint (KH_YHJ.GRADE_CODE_FK) violated - child record found
+-- ORA-02292: 무결성 제약조건(KH_YHJ.GRADE_CODE_FK)이 위배되었습니다- 자식 레코드가 발견되었습니다
 
 DELETE FROM USER_GRADE WHERE GRADE_CODE = 20;
 -- GRADE_CODE 중 20은 외래키로 참조되고 있지 않으므로 삭제가 가능함
@@ -567,7 +567,7 @@ CREATE TABLE USER_USED_CHECK(
 INSERT INTO USER_USED_CHECK VALUES
 (1,'USER01','PASS01','홍길동',
 '남자','010-1234-5678','hong@kr.or.kr');
--- ORA-02290: check constraint (KH_YHJ.GENDER_CHECK) violated
+-- ORA-02290: 체크 제약조건(KH_YHJ.GENDER_CHECK)이 위배되었습니다
 
 INSERT INTO USER_USED_CHECK VALUES
 (1,'USER01','PASS01','홍길동',
