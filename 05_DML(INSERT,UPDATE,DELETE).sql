@@ -257,3 +257,5 @@ SELECT * FROM EMPLOYEE3;
 
 -- DELETE : 휴지통 버리기(복구 가능)
 -- TRUNCATE : 완전 삭제(복구 불가능)
+
+
